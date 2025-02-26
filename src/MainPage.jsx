@@ -1,4 +1,7 @@
 import React from 'react'
+import Recipe from './Recipe'
+import IngredientsList from './IngredientsList'
+import getRecipeFromMistral from './ai'
 
 export default function MainPage() {
     const [ingredients, setIngredients] = React.useState(["potatoes","pasta","main spices","quinoa"])
@@ -11,10 +14,6 @@ export default function MainPage() {
     function toggleRecipeShown() {
         setRecipeShown(prevShown => !prevShown)
     }
-
-    const ingredientsListItems = ingredients.map(ingredient => (
-        <li key={ingredient}>{ingredient}</li>
-    ))
 
     //This function extracts the ingredient name from the form’s formData.
     function addIngredient(formData) {
@@ -34,28 +33,11 @@ export default function MainPage() {
                 />
                 <button>Add ingredient</button>
             </form>
-            {ingredients.length > 0 && <section>
-                <h2>Ingredients on hand:</h2>
-                <ul className="ingredients-list" aria-live="polite">{ingredientsListItems}</ul>
-                {ingredients.length > 3 && <div className="get-recipe-container">
-                    <div>
-                        <h3>Ready for a recipe?</h3>
-                        <p>Generate a reciepe from your list of ingredients</p>
-                    </div>
-                    <button onClick={toggleRecipeShown}>Get a recipe</button>
-                </div>}
-            </section>}
-
-
-            {recipeShown && <section>
-                    <h2>Instructions:</h2>
-                    <p>    Sauté Aromatics: Heat olive oil in a pot over medium heat. Add minced garlic and grated ginger, stirring for 1-2 minutes until fragrant.
-                    Cook Tomatoes: Add chopped tomatoes and cook for 3-4 minutes until they break down and become saucy.
-                    Add Potatoes: Stir in diced potatoes, paprika, black pepper, and salt. Mix well to coat the potatoes in the tomato mixture.
-                    Simmer: Pour in the vegetable broth, bring to a boil, then reduce heat and let it simmer for 15-20 minutes until the potatoes are tender.
-                    Toast Bread: While the stew simmers, toast the sourdough bread until golden brown.
-                    Serve: Ladle the stew into bowls and serve with the toasted sourdough on the side.</p>
-                </section>}
+            {ingredients.length > 0 && 
+                <IngredientsList 
+                    ingredients={ingredients} //ingredients and toggleRecipeShown as props so they can be used in IngredientsList.jsx
+                    toggleRecipeShown={toggleRecipeShown} />} 
+            {recipeShown && <Recipe />}
 
 
         </main>
